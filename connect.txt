@@ -1,24 +1,24 @@
+//this code can be used for atomic email validation... change field name as per your requirements.
 <?php
-// for taking uset input as it is in the HTML form
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
+// for taking user input as it is in the HTML form
+
     $gender = $_POST['gender'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = $_POST['password'];a
     $number = $_POST['number']; 
-if (!empty($firstName) || !empty($lastName) || !empty($gender) || !empty($email) || !empty($password) || !empty($number)) {
+if (!empty($gender) || !empty($email) || !empty($password) || !empty($number)) {
     // database details
     $host = "localhost";
     $dbUsername = "root";
     $dbPassword = "";
-    $dbname = "practice1"; // youtube at source // Database name should be equal to table name.
+    $dbname = "practice1"; // use your own database name
     // create connection
     $conn = new mysqli($host, $dbUsername, $dbPassword, $dbname);
     if(mysqli_connect_error()){
         die('Connect Error('.mysqli_connect_errno().')'.mysqli_connect_error());
     } else {
         $SELECT = "SELECT email From registration Where email = ? Limit 1";
-        $INSERT = "INSERT Into registration (firstName,lastName,gender,email,password,number) values (?, ?, ?, ?, ?, ?) ";
+        $INSERT = "INSERT Into registration (gender,email,password,number) values (?, ?, ?, ?) ";
         //Prepare statement
         $stmt = $conn->prepare($SELECT);
         $stmt->bind_param("s", $email);
@@ -29,7 +29,7 @@ if (!empty($firstName) || !empty($lastName) || !empty($gender) || !empty($email)
         if($rnum==0){
             $stmt->close();
             $stmt = $conn->prepare($INSERT);
-            $stmt->bind_param("sssssi",$firstName, $lastName, $gender, $email, $password, $number);
+            $stmt->bind_param("sssi",$gender, $email, $password, $number);
             $stmt->execute();
             echo "New record inserted sucessfully"; // here you can add an other HTML page to redirect in an another page or site,
         } else {
@@ -39,7 +39,7 @@ if (!empty($firstName) || !empty($lastName) || !empty($gender) || !empty($email)
         $conn->close();
     }
 } else {
-    echo "All fields are required." ; // server side validation.. for client side use required in HTML
+    echo "All fields are required." ;
     die();
 }
     
